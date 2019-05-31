@@ -15,7 +15,7 @@ Our goal is to ensure our pipeline works well after each code being pushed. The 
 
 ## First step, running up the services
 
-Since one of the goals is to obtain the ``sonarqube`` report of our project, we should be able to access sonarqube from the jenkins service. ``Docker compose`` is a best choice to run services working together. We configure our application services in a yaml file as below.
+Since one of the goals is to obtain the ``sonarqube`` report of our project, we should be able to access sonarqube from the jenkins service. ``Docker compose`` is a best choice to run services working together. We configure our application services in a yaml file as mentioned below.
 
 ``docker-compose.yml``
 ```yml
@@ -138,7 +138,7 @@ Since we will perform some operations such as ``checkout codebase`` and ``pushin
 
 We use the value we entered in the ``ID`` field to Docker Login in the script file. Now, we define pipeline under _Jenkins Home Page -> New Item_ menu.
 
-![](images/010.png)
+![](images/0100.png)
 
 In this step, we select ``GitHub hook trigger for GITScm pooling`` options for automatic run of the pipeline by ``Github hook`` call.
 
@@ -146,7 +146,7 @@ In this step, we select ``GitHub hook trigger for GITScm pooling`` options for a
 
 Also in the Pipeline section, we select the ``Pipeline script from SCM`` as Definition, define the GitHub repository and the branch name, and specify the script location (Jenkins file).
 
-![](images/012.png)
+![](images/0120.png)
 
 After that, when a push is done to the remote repository or when you manually trigger the pipeline by ``Build Now`` option, the steps described in Jenkins file will be executed.
 
