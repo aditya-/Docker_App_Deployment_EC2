@@ -138,7 +138,7 @@ Since we will perform some operations such as ``checkout codebase`` and ``pushin
 
 We use the value we entered in the ``ID`` field to Docker Login in the script file. Now, we define pipeline under _Jenkins Home Page -> New Item_ menu.
 
-![](images/0100.png)
+![](images/0101.png)
 
 In this step, we select ``GitHub hook trigger for GITScm pooling`` options for automatic run of the pipeline by ``Github hook`` call.
 
