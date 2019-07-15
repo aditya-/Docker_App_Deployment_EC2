@@ -1,10 +1,15 @@
 # Docker_Jenkins_web_app_EC2_Deployment
 
-This continution of could provisioning of EC2 Docker Host machine, This Repository deals with Continuous-Integration and Continuous-Deployment Pipeline in Jenkins for a java based Dockerized Application 
+This continution of could provisioning of EC2 Docker Host machine, This Repository deals with java based Dockerized Application Container Deployment through **Docker compose** and Docker file scripting, Further shipping **Re-producible docker images** through Jenkins Pipeline(Continuous-Integration and Continuous-Deployment Pipeline). 
 
-This repository is tries to exemplify how to automatically manage the process of building and deployment phases.
+This repository is tries to exemplify how to automatically manage the process of building and deployment phases. 
 
-Our goal is to ensure our pipeline works well after each code being pushed. The processes we want to auto-manage:
+First we will setup the Container infrastructure through docker-compose and docker file scripting then ensure to build reproducible docker images with Jenkins pipeline whenver we find any changes in application code. 
+
+To ensure building of reproducible docker images, we will be provisioning a Jenkins container then we will add Jenkins Pipeline script and Git Webhook Configuration to oensure ur pipeline works well after each code being pushed.We can further orchestrate the application deployment and scalinng through **Kubernetes** or other scaling solutions. 
+
+Following are the pipeline stages of Jenkins Docker Image Build Pipeline:
+
 * Code checkout
 * Create Docker image
 * Push the image to Docker Hub
