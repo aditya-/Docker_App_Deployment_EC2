@@ -159,3 +159,30 @@ Also in the Pipeline section, we select the ``Pipeline script from SCM`` as Defi
 
 ![](images/0120.png)
 
+
+
+## Review important points of the Jenkins file
+
+The ``Docker client`` tools we have defined in Jenkins under _Global Tool Configuration_ menu are added to the ``PATH environment variable`` for using these tools with ``sh command``.
+
+```
+stage('Push to Docker Registry'){
+    withCredentials([usernamePassword(credentialsId: 'dockerHubAccount', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+        pushToImage(CONTAINER_NAME, CONTAINER_TAG, USERNAME, PASSWORD)
+    }
+}
+```
+
+``withCredentials`` provided by ``Jenkins Credentials Binding Plugin`` and bind credentials to variables. We passed **dockerHubAccount** value with ``credentialsId`` parameter. Remember that, dockerHubAccount value is Docker Hub credentials ID we have defined it under _Jenkins Home Page -> Credentials -> Global credentials (unrestricted) -> Add Credentials_ menu. In this way, we access to the username and password information of the account for login.
+
+## Application and HA
+
+With reverse proxy configuration, we can achieve non https redirection to https protocol
+
+You can access the application at https://localhost
+
+@TODO:
+
+I will try further to add High-availability of the application though Kubernetes or sclaing Docker server through Auto-scaling. As part of above process we are pushing the building the docker image with respective tags and pushing back to the DockeHub Registry. 
+
+In this scenraio usage of Kubenetes is much better for scaling the application instead host machine scaling everytime.
