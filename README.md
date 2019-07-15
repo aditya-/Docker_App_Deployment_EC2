@@ -1,16 +1,13 @@
-# Jenkins_micro-service_app_CI_CD_Docker
-This Repository deals with Continuous-Integration and Continuous-Deployment Pipeline in Jenkins for a Micro-Service based Dockerized Application 
+# Docker_Jennkins_web_app_EC2_Deployment
+This Repository deals with Continuous-Integration and Continuous-Deployment Pipeline in Jenkins for a java based Dockerized Application 
 
 This repository is tries to exemplify how to automatically manage the process of building, testing with the highest coverage, and deployment phases.
 
 Our goal is to ensure our pipeline works well after each code being pushed. The processes we want to auto-manage:
 * Code checkout
-* Run tests
-* Compile the code
-* Run Sonarqube analysis on the code
 * Create Docker image
 * Push the image to Docker Hub
-* Pull and run the image
+* Create the container with port mappings
 
 
 ## First step, running up the services
@@ -21,13 +18,25 @@ Since one of the goals is to obtain the ``sonarqube`` report of our project, we 
 ```yml
 version: '3.2'
 services:
-  sonarqube:
-    build:
-      context: sonarqube/
+
+  reverse_proxy:
+    build: ./reverse_proxy
+    user: nginx
     ports:
-      - 9000:9000
-      - 9092:9092
-    container_name: sonarqube
+      - "80:80"
+
+  appserver:
+    build:
+       context: app
+       dockerfile: Dockerfile
+    image: java:8-jdk-alpine
+    user: app
+    ports:
+      - "5005:5005"
+    networks:
+      - front-tier
+      - back-tier
+
   jenkins:
     build:
       context: jenkins/
@@ -40,16 +49,16 @@ services:
     volumes:
       - /tmp/jenkins:/var/jenkins_home #Remember that, the tmp directory is designed to be wiped on system reboot.
       - /var/run/docker.sock:/var/run/docker.sock
-    depends_on:
-      - sonarqube
+
+networks:
+  front-tier:
+  back-tier:
+    driver: overlay
+
 ```
 
 Paths of docker files of the containers are specified at context attribute in the docker-compose file. Content of these files as follows.
 
-``sonarqube/Dockerfile``
-```
-FROM sonarqube:6.7-alpine
-```
 
 ``jenkins/Dockerfile``
 ```
@@ -67,7 +76,8 @@ docker ps
 
 CONTAINER ID        IMAGE                COMMAND                  CREATED              STATUS              PORTS                                              NAMES
 87105432d655        pipeline_jenkins     "/bin/tini -- /usr..."   About a minute ago   Up About a minute   0.0.0.0:8080->8080/tcp, 0.0.0.0:50000->50000/tcp   jenkins
-f5bed5ba3266        pipeline_sonarqube   "./bin/run.sh"           About a minute ago   Up About a minute   0.0.0.0:9000->9000/tcp, 0.0.0.0:9092->9092/tcp     sonarqube
+f5bed5ba3266        appserver   "./bin/run.sh"           About a minute ago   Up About a minute   0.0.0.0:5005->5005/tcp,      appserver
+f5bed5ba3288        reverse_proxy   "./bin/run.sh"           About a minute ago   Up About a minute   0.0.0.0:80->80/tcp,      reverse_proxy
 ```
 
 ## GitHub configuration
@@ -148,9 +158,7 @@ Also in the Pipeline section, we select the ``Pipeline script from SCM`` as Defi
 
 ![](images/0120.png)
 
-After that, when a push is done to the remote repository or when you manually trigger the pipeline by ``Build Now`` option, the steps described in Jenkins file will be executed.
 
-![](images/013.png)
 
 ## Review important points of the Jenkins file
 
@@ -174,23 +182,6 @@ stage('Push to Docker Registry'){
 
 ``withCredentials`` provided by ``Jenkins Credentials Binding Plugin`` and bind credentials to variables. We passed **dockerHubAccount** value with ``credentialsId`` parameter. Remember that, dockerHubAccount value is Docker Hub credentials ID we have defined it under _Jenkins Home Page -> Credentials -> Global credentials (unrestricted) -> Add Credentials_ menu. In this way, we access to the username and password information of the account for login.
 
-## Sonarqube configuration
 
-For ``Sonarqube`` we have made the following definitions in the ``pom.xml`` file of the project.
 
-```xml
-<sonar.host.url>http://sonarqube:9000</sonar.host.url>
-...
-<dependencies>
-...
-    <dependency>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>sonar-maven-plugin</artifactId>
-        <version>2.7.1</version>
-        <type>maven-plugin</type>
-    </dependency>
-...
-</dependencies>
-```
-
-In the docker compose file, we gave the name of the Sonarqube service which is ``sonarqube``, this is why in the ``pom.xml`` file, the sonar URL was defined as http://sonarqube:9000.
+You can access the application at http://localhost
