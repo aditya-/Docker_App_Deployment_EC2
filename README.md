@@ -62,7 +62,7 @@ networks:
 
 ```
 **Self-Signed SSL Gen:**
-This application uses Docker secrets to secure the application components such as self-signed certificates. The reverse proxy requires creating a certificate that is stored as a secret. To create a certificate and add as a secret, run the following commands in Docker Server Machine:
+This application uses Docker secrets to secure the application components such as self-signed certificates. The reverse proxy requires creating a certificate that is stored as a secret. To create a certificate and add as a secret, run the following commands in Docker host machine:
 
 ```
 mkdir certs
