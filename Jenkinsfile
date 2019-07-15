@@ -15,7 +15,7 @@ node {
         checkout scm
     }
 
-    // uncomment the maven build when pom.xml is available
+    // uncomment the maven build when the pom.xml is available
     // stage('Build'){
     //     sh "mvn clean install"
     // }
