@@ -1,9 +1,9 @@
-FROM maven:3-alpine
+FROM tomcat:8.0-alpine
 
-COPY src/ pipeline/src/
+LABEL maintainer="karri.aditya@outlook.com"
 
-WORKDIR pipeline/src/
+ADD src/companyNews.war /usr/local/tomcat/webapps/
 
 EXPOSE 5005
 
-ENTRYPOINT [ "java", "-jar", "/pipeline/src/companyNews.war"]
+CMD ["catalina.sh", "run"]
