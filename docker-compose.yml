@@ -1,12 +1,24 @@
 version: '3.2'
 services:
-  sonarqube:
-    build:
-      context: sonarqube/
+
+  reverse_proxy:
+    build: ./reverse_proxy
+    user: nginx
     ports:
-      - 9000:9000
-      - 9092:9092
-    container_name: sonarqube
+      - "80:80"
+
+  appserver:
+    build:
+       context: app
+       dockerfile: Dockerfile
+    container_name: appserver
+    user: app
+    ports:
+      - "5005:5005"
+    networks:
+      - front-tier
+      - back-tier
+
   jenkins:
     build:
       context: jenkins/
@@ -19,5 +31,8 @@ services:
     volumes:
       - /tmp/jenkins:/var/jenkins_home #Remember that, the tmp directory is designed to be wiped on system reboot.
       - /var/run/docker.sock:/var/run/docker.sock
-    depends_on:
-      - sonarqube
+
+networks:
+  front-tier:
+  back-tier:
+    driver: overlay
