@@ -50,7 +50,6 @@ services:
     user: root
     ports:
       - 8080:8080
-      - 50000:50000
     container_name: jenkins
     volumes:
       - /tmp/jenkins:/var/jenkins_home #Remember that, the tmp directory is designed to be wiped on system reboot.
@@ -94,9 +93,9 @@ docker-compose -f docker-compose.yml up --build
 docker ps
 
 CONTAINER ID        IMAGE                COMMAND                  CREATED              STATUS              PORTS                                              NAMES
-87105432d655        pipeline_jenkins     "/bin/tini -- /usr..."   About a minute ago   Up About a minute   0.0.0.0:8080->8080/tcp, 0.0.0.0:50000->50000/tcp   jenkins
+87105432d655        pipeline_jenkins     "/bin/tini -- /usr..."   About a minute ago   Up About a minute   0.0.0.0:8080->8080/tcp,      jenkins
 f5bed5ba3266        appserver   "./bin/run.sh"           About a minute ago   Up About a minute   0.0.0.0:5005->5005/tcp,      appserver
-f5bed5ba3288        reverse_proxy   "./bin/run.sh"           About a minute ago   Up About a minute   0.0.0.0:80->80/tcp,      reverse_proxy
+f5bed5ba3288        reverse_proxy   "./bin/run.sh"           About a minute ago   Up About a minute   0.0.0.0:80->80/tcp, 0.0.0.0:443->443/tcp       reverse_proxy
 ```
 
 ## GitHub configuration
@@ -209,4 +208,6 @@ You can access the application at  `https://localhost`
 
 I will try further to add High-availability of the application though **Kubernetes** or sclaing Docker server through **Auto-scaling with scaling policies**. As part of above process we are building the docker image with respective tags and pushing back to the DockeHub Registry. 
 
-In this scenraio usage of **Kubenetes** is much better for scaling the application across multiple containers(Horizontal scaling) instead host machine scaling(vertical scaling) everytime which is not a good practice.
+In this scenraio usage of **Kubenetes** is much better for scaling the application across multiple containers(Horizontal scaling) instead host machine scaling(vertical scaling) everytime which is not a good practice. 
+
+We can use Deployment Patterns in **"Kubernetes"** for Application scaling and Deployment such as Canary deployment, provided proper moniotring is integrated such as **Prometheus**
