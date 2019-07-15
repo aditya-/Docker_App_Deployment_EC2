@@ -6,7 +6,9 @@ This repository is tries to exemplify how to automatically manage the process of
 
 First we will setup the Container infrastructure through docker-compose and docker file scripting then ensure to build reproducible docker images with Jenkins pipeline whenver we find any changes in application code. 
 
-To ensure building of reproducible docker images, we will be provisioning a Jenkins container then we will add Jenkins Pipeline script and Git Webhook Configuration to oensure ur pipeline works well after each code being pushed.We can further orchestrate the application deployment and scalinng through **Kubernetes** or other scaling solutions. 
+To ensure building of reproducible docker images, we will be provisioning a Jenkins container then we will add Jenkins Pipeline script and Git Webhook Configuration to oensure ur pipeline works well after each code being pushed.
+
+We can further Scale and Orchestrate the above Application through **Kubernetes** or other scaling solutions. 
 
 Following are the pipeline stages of Jenkins Docker Image Build Pipeline:
 
