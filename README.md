@@ -49,7 +49,7 @@ services:
     privileged: true
     user: root
     ports:
-      - 8080:8080
+      - "8080:8080"
     container_name: jenkins
     volumes:
       - /tmp/jenkins:/var/jenkins_home #Remember that, the tmp directory is designed to be wiped on system reboot.
