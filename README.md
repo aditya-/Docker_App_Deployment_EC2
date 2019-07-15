@@ -183,6 +183,6 @@ stage('Push to Docker Registry'){
 
 ``withCredentials`` provided by ``Jenkins Credentials Binding Plugin`` and bind credentials to variables. We passed **dockerHubAccount** value with ``credentialsId`` parameter. Remember that, dockerHubAccount value is Docker Hub credentials ID we have defined it under _Jenkins Home Page -> Credentials -> Global credentials (unrestricted) -> Add Credentials_ menu. In this way, we access to the username and password information of the account for login.
 
-With reverse proxy configuration, we can achieve non https redirection to https redorection
+With reverse proxy configuration, we can achieve non https redirection to https protocol
 
 You can access the application at https://localhost
