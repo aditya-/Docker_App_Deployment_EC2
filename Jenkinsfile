@@ -1,6 +1,7 @@
+def CONTAINER_NAME="docker_java_image_app_build"
 def CONTAINER_TAG="latest"
 def DOCKER_HUB_USER="aditya36955"
-def HTTP_PORT="443"
+def HTTP_PORT="8090"
 
 node {
 
@@ -13,6 +14,11 @@ node {
     stage('Checkout') {
         checkout scm
     }
+
+    // uncomment the maven build when pom.xml is available
+    // stage('Build'){
+    //     sh "mvn clean install"
+    // }
 
     stage("Image Prune"){
         imagePrune(CONTAINER_NAME)
