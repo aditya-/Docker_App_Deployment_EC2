@@ -183,6 +183,6 @@ You can access the application at https://localhost
 
 @TODO:
 
-I will try further to add High-availability of the application though Kubernetes or sclaing Docker server through Auto-scaling. As part of above process we are pushing the building the docker image with respective tags and pushing back to the DockeHub Registry. 
+I will try further to add High-availability of the application though Kubernetes or sclaing Docker server through Auto-scaling. As part of above process we are building the docker image with respective tags and pushing back to the DockeHub Registry. 
 
 In this scenraio usage of Kubenetes is much better for scaling the application instead host machine scaling everytime.
