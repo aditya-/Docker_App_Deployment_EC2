@@ -24,20 +24,18 @@ Since one of the goals is to obtain the ``sonarqube`` report of our project, we 
 
 ``docker-compose.yml``
 ```yml
-version: '3.2'
-services:
+version: "3.1"
 
+services:
   reverse_proxy:
     build: ./reverse_proxy
     user: nginx
-    ports:
-      - "80:80"
 
   appserver:
     build:
        context: app
        dockerfile: Dockerfile
-    image: java:8-jdk-alpine
+    container_name: appserver
     user: app
     ports:
       - "5005:5005"
@@ -62,6 +60,19 @@ networks:
   front-tier:
   back-tier:
     driver: overlay
+
+```
+**Self-Signed SSL Gen:**
+This application uses Docker secrets to secure the application components such as self-signed certificates. The reverse proxy requires creating a certificate that is stored as a secret. To create a certificate and add as a secret, run the following commands in Docker Server Machine:
+
+```
+mkdir certs
+
+openssl req -newkey rsa:4096 -nodes -sha256 -keyout certs/domain.key -x509 -days 365 -out certs/domain.crt
+
+docker secret create revprox_cert certs/domain.crt
+
+docker secret create revprox_key certs/domain.key
 
 ```
 
@@ -192,8 +203,10 @@ stage('Push to Docker Registry'){
 
 With reverse proxy configuration, we can achieve non https redirection to https protocol
 
-You can access the application at https://localhost
+You can access the application at  `https://localhost`
 
 **@TODO**:
 
-I will try further to add High-availability of the application though **Kubernetes** or sclaing Docker server through **Auto-scaling with scaling policies**. As part of above process we are building the docker image with respective tags and pushing back to the DockeHub Registry. In this scenraio usage of **Kubenetes** is much better for scaling the application instead host machine scaling everytime.
+I will try further to add High-availability of the application though **Kubernetes** or sclaing Docker server through **Auto-scaling with scaling policies**. As part of above process we are building the docker image with respective tags and pushing back to the DockeHub Registry. 
+
+In this scenraio usage of **Kubenetes** is much better for scaling the application across multiple containers(Horizontal scaling) instead host machine scaling(vertical scaling) everytime which is not a good practice.
